@@ -2,7 +2,7 @@
 
 \usepackage{setspace}
 
-\usepackage{amsmath, amsfonts, amssymb, graphicx, color, fancyhdr, lipsum, scalerel, stackengine, mathrsfs, tikz-cd, mdframed, enumitem, framed, adjustbox, bbm, upgreek, xcolor, hyperref}
+\usepackage{amsmath, amsfonts, amssymb, graphicx, color, fancyhdr, mathrsfs, tikz-cd, mdframed, enumitem, framed, adjustbox, bbm, upgreek, xcolor, hyperref}
 \usepackage[framed,thmmarks]{ntheorem}
 \usepackage[style=alphabetic]{biblatex}
 %Set the bibliography file
@@ -49,7 +49,7 @@
 \renewcommand{\abstractname}{Introduction}
 \begin{abstract}
 	These notes are my summary of the realization of the Grassmanian $\Gr(n,k)$ as a quotient of 
-	the Lie group $\GL_n(\k)$. In particular the focus will be on $\k=\bbR$ or $\bbC$.
+	the Lie group $\GL_n(\k)$. In particular the focus will be on $\k=\bbR$ or $\bbC$. I also talk about quantum deformations of $\Gr(n,k)$.
 \end{abstract}
 
 \section*{Vista: Where We're Headed}
@@ -58,11 +58,237 @@ the upshot to considering this viewpoint is that is allows us to consider this o
 manifold theory. This gives us some great machinery to grasp onto to prove some nice properties 
 about $\Gr(n,k)$.
 
-\section{The Group Action}
-Let $\k=\bbR$ or $\bbC$ and let $V=\k^n$. Let $G=\GL(V)$, considered as a Lie group. The first thing to notice is that there is a natural action 
-of $G$ on the set of $k$-dimensional subspaces of $V$ in the following way:
-\section{Smooth Manifold Structure}
+Eventually I will lead us slightly astray by investigating a ``quantum analog'' of $\Gr(n,k)$. This $q$-deformation
+is related closely to the kinds of structures I have been thinking about recently: specifically quantum groups. One can think of 
+these as ``deformations'' of groups in some controlled way.
 
+\section{The Grassmannian as a Lie group quotient}
+In the following, let $\k=\bbR$ or $\bbC$ and let $V=\k^n$. For a great introduction to this theory see \cite{LeeISM},
+(specifically chapters 1, 7, and 21), which serves as the primary source for this section.
+\subsection{Smooth Manifolds}
+Recall that a smooth manifold is a topological manifold equipped with a \textbf{smooth structure}: that is, an atlas comprised 
+of smoothly-compatable charts (ones where the transition functions are smooth as maps of Euclidean spaces).
+\subsection{The general linear Lie group} 
+Let $G=\GL(V)$, initially considered just as a group. In fact, one can apply to $G$ a smooth structure very naturally
+by recognizing $\GL(V)\subseteq M_{n\times n}(\k)$, the latter of which is identified with the Euclidean space $\k^{n^2}$,
+whose smooth structure is the obvious one (the identity map).
+
+That $G$ itself is a smooth manifold comes from the fact that $\GL(V)=\det^{-1}(\k\setminus\{0\})$, which is 
+itself an open set as the inverse image of an open set under a continuous map. So then $G$ is a (codimension zero) open (smooth) submanifold
+of $M_{n\times n}(k)$ whose smooth structure is inherited from the ambient space.
+
+In fact, the algebraic and geometric structure of $G$ come together in a very nice way to define what is called 
+a \textbf{Lie group:}
+\begin{defn}
+	Let $G$ be a smooth manifold. Then a \textbf{Lie group} is $G$ along with a group structure given by maps $m:G\times G\to G$ and $i:G\to G$
+	(representing multiplication and inverse maps) such that $m$ and $i$ are smooth maps (smooth in charts).
+\end{defn}
+
+\begin{prop}
+	$G$ is a Lie group.
+\end{prop}
+\begin{prf}
+	Since we have already defined the smooth and group structures on $G$, it suffices to show that 
+	$m$ and $i$ (matrix multiplication and the inverse map) are smooth maps.
+
+	Multiplication is smooth since if we consider the $i^{th}$ component function of $m$, where $i=an+b$ for $1\le a,b\le n$, we get (for $\mathbf x$ and $\mathbf y$ in $\k^{n^2}$)
+	\[m_i(\mathbf x,\mathbf y)=\sum_{k=1}^{n}\mathbf x_{an+k}\mathbf y_{kn+b}\]
+	which is a polynomial in the $x_i$ and $y_i$ and is thus (clearly) smooth.
+
+	That the inverse map is also smooth follows via similar reasoning: since $\det$ is smooth (again a polynomial in the entries),
+	computing the adjugate matrix is a smooth operation and so via Cramer's rule (since $\det A\ne 0$)
+	\[i(A)=\frac{1}{\det A}\operatorname{adj}A\]
+	is also a smooth operation.
+\end{prf}
+
+\subsection{The action on \texorpdfstring{$\Gr(n,k)$}{Gr(n,k)}}
+The first thing to notice is that there is a natural action 
+of $G$ on the set of $k$-dimensional subspaces of $V$ in the following way: let $A\in\GL(V)$ and let $W\le V$ be a $k$-dimensional 
+subspace. Then $A(W)$ is also $k$-dimensional since $A$ is invertible\footnote{If you are not convinced, remember that $A$ being invertible means all minors are nonsingular,
+so by extending a basis for $W$ to $V$ and looking at $A$ in this basis, the top-left $k\times k$ matrix defines an isomorphism 
+of $W$ onto some other subspace of $V$.}.
+\begin{prop}
+	The action defined above gives a group action of $\GL(V)$ on $\Gr(n,k)$.
+\end{prop}
+\begin{prf}
+	This is clear since the identity matrix $I_n$ fixes subspaces and since matrix multiplication is associative.
+\end{prf}
+
+\subsection{Defining a smooth structure on the Grassmanian}
+As we are working in the context of smooth manifolds, we need to make some sense of how this action fits into the theory of smooth group actions.
+Normally,
+\begin{defn}
+	If $G$ is a Lie group and $M$ is a smooth manifold, we say $G$ acts smoothly on $M$ if $G$ acts on $M$ as a set and the map 
+	\[\rho:G\times M\to M\]
+	given by 
+	\[\rho(g,m)=g.m\]
+	is a smooth map.
+\end{defn}
+In this case, we don't have a smooth structure (yet!) on $\Gr(n,k)$, so we will define one:
+
+\subsubsection{Stabilizers}
+Our first step is to show that the stabilizer of an arbitrary $W\in\Gr(n,k)$, denoted $G_W$, is a closed Lie subgroup (that is a Lie group and closed smooth submanifold). 
+To this end:
+\begin{thm}[Closed Subgroup Theorem]\label{thm-closed-subgroup}
+	Suppose $G$ is a Lie group and $H\subseteq G$ is a subgroup that is also a closed subset of $G$. Then $H$ is an embedded 
+	Lie subgroup.
+\end{thm}
+\begin{rmk}
+	The proof of this theorem is two pages of Lie theory and is a little involved for this talk. Jack does 
+	a great job (as always) in his proof (cf. \cite[Thm. 20.12]{LeeISM})
+\end{rmk}
+
+\noindent Using this theorem we start by proving something about a particular subset:
+\begin{prop}\label{prop-GW}
+	Fix some basis $\calB$ for $V$. Let $W\le V$ be the subspace of $\k^n$ by setting the last $(n-k)$ coordinates in this basis to zero (which is isomorphic to $\k^k$). Then 
+	the stabilizer $G_W$ of $W$ is 
+	\[G_W=\left\{\begin{pmatrix}
+		A & B\\ 0 & D
+	\end{pmatrix}:A\in\GL_k(\k),\ D\in\GL_{n-k}(\k),\ B\in M_{k\times n-k}(\k)\right\}\]
+	and this set is a closed Lie subgroup of $\GL(V)$.
+\end{prop}
+\begin{prf}
+	We begin by noticing that $G_W$ as above is precisely the stabilizer of $W$. But because we picked 
+	$W$ in the way we did, we know immediately that $\calA\in\GL(V)$ fixes $W$ if the $i^{th}$ coordinate
+	of $\calA(\mathbf x)$ is zero for all $\mathbf x=(x_1,\dots,x_k,0,\dots,0)$. Since that $x_i$ are arbitrary,
+	we get that $\calA$ is block upper triangular as above. That $A$ and $D$ are invertible comes from the fact that 
+	\[\det\calA=\det A\det D\ne 0.\]
+	Therefore the stabilizer of $W$ is contained in $G_W$. The reverse inclusion is clear.
+
+	That $G_W$ is a subgroup of $\GL(V)$ then follows from group theory. In light of thm.~\ref{thm-closed-subgroup},
+	proving that $G_W$ is a Lie subgroup amounts to showing that $G_W$ forms a closed subset of $\GL(V)$. But this is clear because 
+	this is inverse image of all of $\GL_k(\k)$ under $F:\GL(V)\to\GL_k(\k)$ that maps a matrix to the $k\times k$ minor in the upper left corner.
+
+	Equivalently, $G_W$ is defined by the closed condition $\calA_{ij}=0$ if $i\ge k_1$ and $j\le k$. That every such matrix has the form of $G_W$ is 
+	clear as argued above.
+
+	Thus $G_W$ is closed, so is a closed Lie subgroup of $G$.
+\end{prf}
+
+So we have shown that a particular stabilizer $G_{\k^k}$ is a closed Lie subgroup, but in fact this holds for \textit{any $W\in\Gr(n,k)$:}
+\begin{cor}
+	For any $W\in\Gr(n,k)$, $G_W$ is a closed Lie subgroup of $G$.
+\end{cor}
+\begin{prf}
+	Simply choose a new basis for $V$ such that all vectors in $W$ are of the form 
+	\[(v_1,\dots,v_k,0,\dots,0)\]
+	and apply prop.~\ref{prop-GW}.
+\end{prf}
+
+\subsubsection{The Quotient Manifold Theorem}
+Recall from point-set topology that a proper map is one that pulls back compact sets to compact sets.
+\begin{defn}
+	An action of a Lie group $G$ on a smooth manifold $M$ is \textbf{proper} if the map 
+	\[G\times M\to M\times M\qquad \text{via}\qquad (g,p)\mapsto(g.p,p)\]
+	is a proper map.
+\end{defn}
+\begin{rmk}
+	Jack (\cite[Ex. 21.3]{LeeISM}) says that this is a \textit{strictly weaker} condition than saying
+	$(g,p)\mapsto g.p$ is proper.
+\end{rmk}
+\begin{thm}[Quotient Manifold Theorem]\label{thm-QMT}
+	Let $G$ be a Lie group acting \textit{smoothly, freely, and properly} on a smooth manifold $M$. Then 
+	the orbit space $M/G$ is a topological manifold of dimension $\dim M-\dim G$ and has a unique smooth structure 
+	making the quotient map $\pi:M\to M/G$ a smooth submersion.
+\end{thm}
+\begin{prf}
+	As before, see Jack's proof \cite[thm. 21.10]{LeeISM}.
+\end{prf}
+\begin{rmk}
+	In case this wasn't obvious, this is a rather high-powered result and is the primary facilitator of what follows.
+\end{rmk}
+
+\subsubsection{Homogeneous Spaces}
+\begin{defn}
+	A smooth manifold $M$ endowed with a \textit{transitive, smooth} action by a Lie group $G$ is called
+	a \textbf{homogeneous space.}
+\end{defn}
+Then we use the quotient manifold theorem to construct a homogeneous space for ourselves (following part of the proof of \cite[thm. 21.17]{LeeISM}):
+\begin{prop}
+	Let $W$ be an arbitrary element in $\Gr(n,k)$. Then if $G=\GL(V)$, $G/G_W$ is a homogeneous space given by the action
+	\[g\cdot (g'H)=(gg')H\]
+\end{prop}
+\begin{prf}
+	Consider the action of $G_W$ on $G$ by left multiplication. This action is free since if $hg=g$, we get $h=e$. The action is a restriction of 
+	$G$ on itself by left multiplication, which is smooth by virtue of being a Lie group, so the action is smooth.
+
+	To see the action is proper, we use the fact (proved in \cite[prop. 21.5(a,b)]{LeeISM}) that the action is proper if and only if $(h_i)$ is a sequence in $G_W$ and 
+	$(g_i)$ are a sequence in $G$, if both $(h_i)$ and $(h_ig_i)$ converge then the $(g_i)$ converge.
+
+	Let $(g_i)$ be a convergent sequence in $G$ and $(h_i)$ a sequence in $G_W$ such that $(h_ig_i)$ converges. Then by the continuity of 
+	the $G$ action on itself, $h_i=(h_ig_i)g_i^{-1}$ converges to a point in $G$. Since $G_W$ is closed in $G$, this limit converges in $G_W$.
+
+	Thus we can apply thm~\ref{thm-QMT} to say that $G/G_W$ has a unique smooth manifold structure making the quotient map $\pi:G\to G/G_W$ a smooth submersion. The action 
+	\[g\cdot g'G_W=(gg')G_W\]
+	is transitive and smooth, giving us our homogeneous space.
+\end{prf}
+\subsubsection{Bringing it home}
+Now that we have that $G/G_W$ is a smooth manifold, consider the map
+\[F:G/G_W\to \Gr(n,k)\]
+be defined by 
+\[F(A\cdot G_W)=A(W).\]
+
+\begin{lem}
+	$F$ defined as above is a $G$-equivariant bijection.
+\end{lem}
+\begin{prf}
+	This is a well-defined map since if $gG_W=g'G_W$, we get that $g=g'h$ for some $h\in G_W$, thus
+	\[F(gG_W)=g\cdot W=g'hW=g'W=F(g'G_W).\]
+
+	Then that this map is surjective follows since the action of $G$ on $\Gr(n,k)$ has a single orbit. That 
+	the map is injective follows since if the images of the same, this means precisely that $gW=g'W$, so $g^{-1}g'\in G_W$,
+	proving $gG_W=g'G_W$.
+
+	$G$-equivariance is a simple consequence of the fact 
+	\[g\cdot F(g'G_W)=g\cdot (g'W)=(gg')W=F(gg'G_W)=F(g(g'G_W)).\]
+\end{prf}
+
+\noindent Now we can give $\Gr(n,k)$ a smooth structure such that $F$ is a diffeomorphism\footnote{Open sets are precisely the images of open sets of $G/G_V$ and the smooth 
+structure is the one pulled back through $F$.}. Notice now that the action of $G$ on $\Gr(n,k)$ is smooth since we can write 
+\[g\cdot V=F(g\cdot F^{-1}(V))\]
+since $F$ and the action of $G$ on $G/G_W$ is smooth.
+
+We still need to establish that such a smooth structure is, in some sense, \textit{the} structure that makes 
+the action provided into a smooth action. This will be the smooth structure we give the Grassmannian.
+
+We need one more theorem from smooth manifolds to finish this off:
+\begin{thm}[Equivariant Rank Theorem]
+	Let $M$ and $N$ be smooth manifolds and $G$ be a Lie group. If $F:M\to N$ is a smooth, bijective, $G$-equivariant map with respect to 
+	a smooth, transitive action of $G$ on $M$ and any smooth action of $G$ on $N$, then $F$ is a diffeomorphism.
+\end{thm}
+\begin{prf}
+	See \cite[thm 7.25]{LeeISM}.
+\end{prf}
+\begin{lem}
+	There is only one smooth structure on $X=\Gr(n,k)$ such that the action of $G$ on $X$ is smooth.
+\end{lem}
+\begin{prf}
+	Let $\tilde X$ be $X$ with any other smooth structure. Then if $G$ acts smoothly on $\tilde X$, the (smooth) action $\theta^{(W)}:G\to \tilde X$ given by $\theta^{(W)}(g)=g\cdot W$ 
+	descends to the quotient to give us a smooth map $\calF:G/G_W\to \tilde X$, which as before can be shown to be a $G$-equivariant bijection.
+
+	But then by the equivariant rank theorem since the action of $G$ on $G/G_W$ is smooth and transitive, and the action of $G$ on $\tilde X$ is smooth,
+	the map $\calF$ is a diffeomorphism. But then in particular since $F$ gave us a diffeomorphism from $G/G_W$ to $X$, 
+	we have a diffeomorphism $X\cong \tilde X$, so the smooth structure on $X$ is unique.
+\end{prf}
+\subsection{Denouement: \texorpdfstring{$\Gr(n,k)$}{Gr(n,k)} is compact.}
+I found a neat proof of this online \href{https://math.stackexchange.com/questions/148088/compactness-of-the-grassmannian}{here}.
+\begin{prop}
+	$\Gr(n,k)$ is compact.
+\end{prop}
+\begin{prf}
+	Let $S=\{v\in V=\k^n: \|v\|=1\}$. Notice that $S\cong \bbS^{n-1}$, the $n-1$ sphere in $\k^n$, which is compact. Then $S^d=S\times \cdots\times S$ is compact as well.
+
+	Considering $S^d$ as some choice of $d$ unit vectors in $\k^n$, we can consider the map 
+	\[S^d\to\k^{\binom{d}{2}}\qquad\text{via}\qquad (v_1\dots,v_d)\mapsto (v_1\cdot v_2,v_1\cdot v_3,\dots,v_1\cdot v_n,v_2\cdot v_3,\dots,v_{n-1}\cdot v_n)\]
+	and notice that pulling back $\mathbf 0$ in this map gets us a (closed whence) compact subspace $C$ of $S^d$ corresponding to the 
+	sets of $d$ orthonormal vectors in $\k^n$.
+
+	Finally define the equivalence relation on $C$ where $c_1\sim c_2$ if $\operatorname{span} c_1=\operatorname{span} c_2$. Then the quotient 
+	$C/\sim$ is precisely $\Gr(n,k)$ which, as a quotient of a compact space, is compact.
+\end{prf}
+
+\section{Aside: Quantized Grassmanians}
+I will try to say something here about the quantum theory here.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%  Bibliography %%%%%%%%%%%%%
