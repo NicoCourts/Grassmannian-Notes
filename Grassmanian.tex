@@ -46,15 +46,15 @@
 
 \begin{document}
 %make the title page
-\title{The Grassmannian as a Quotient of $\GL_n(\k)$ \vspace{-1ex}}
+\title{Notes on the Grassmannian \vspace{-1ex}}
 \author{Nico Courts}
 \date{Summer 2019}
 \maketitle
 
-\renewcommand{\abstractname}{Introduction}
 \begin{abstract}
 	These notes are my summary of the realization of the Grassmanian $\Gr(n,k)$ as a quotient of 
-	the Lie group $\GL_n(\k)$. In particular the focus will be on $\k=\bbR$ or $\bbC$. I also talk about quantum deformations of $\Gr(n,k)$.
+	the Lie group $\GL(n,\k)$. In particular the focus will be on $\k=\bbR$ or $\bbC$. I also talk about quantum 
+	deformations of $\GL(n,\k)$ and $\Gr(n,k)$.
 \end{abstract}
 
 \section*{Vista: Where We're Headed}
@@ -211,7 +211,7 @@ Recall from point-set topology that a proper map is one that pulls back compact 
 Then we use the quotient manifold theorem to construct a homogeneous space for ourselves (following part of the proof of \cite[thm. 21.17]{LeeISM}):
 \begin{prop}
 	Let $W$ be an arbitrary element in $\Gr(n,k)$. Then if $G=\GL(V)$, $G/G_W$ is a homogeneous space given by the action
-	\[g\cdot (g'H)=(gg')H\]
+	\[g\cdot (g'G_W)=(gg')G_W\]
 \end{prop}
 \begin{prf}
 	Consider the action of $G_W$ on $G$ by left multiplication. This action is free since if $hg=g$, we get $h=e$. The action is a restriction of 
@@ -296,6 +296,16 @@ I found a neat proof of this online \href{https://math.stackexchange.com/questio
 In this section I will take a little time to develop some of the things I have been learning about quickly,
 specifically developing non-commutative algebraic geometry by relying on intuitions from traditional algebraic geometry 
 while ``deforming'' things in a controlled way so that we can use our intuition to develop analogous ideas.
+
+\subsection{Algebra vs. Geometry}
+The discussion that follows is a relatively constructive method for $q$-deforming the Grassmannian and studying the action it 
+inherits from $\GL_q(n)$. It gives a good flavor for the field, but is very strongly rooted in algebra.
+
+That is, the methods we describe take the coordinate ring of the Grassmannian and deform it purely in the realm of algebra, with the understanding 
+that there is some parallel geometric structure that is being analogously twisted.
+
+Late in my research, I found a paper by Aaron Lauve \cite{lauve} takes the results of Taft and Towber and reimagines them in a context that 
+preserves a certain level of geometry. I haven't had time to read it in its entirety but it may be a good place to look for those interested in the geometry.
 
 \subsection{Hopf Algebras}
 The leading idea here is that Hopf algebras lie at the heart of a lot of modern algebra---especially representation theory. Sometimes you are working with 
